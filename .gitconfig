@@ -1,0 +1,22 @@
+# Should be included via `git config --local include.path ../.gitconfig`
+
+[diff "document"]
+    textconv = pandoc --to=markdown
+
+[diff "spreadsheet"]
+    textconv = in2csv --no-header-row
+
+[difftool "opendiff"]
+    cmd = opendiff $LOCAL $REMOTE
+
+[difftool "pandoc"]
+    cmd = t1=`mktemp` && `pandoc --to=markdown $LOCAL --output=$t1` && t2=`mktemp` && `pandoc --to=markdown $REMOTE --output=$t2` && opendiff $t1 $t2 && rm -f $t1 $t2
+
+[difftool "csvkit"]
+    cmd = t1=`mktemp` && `in2csv --no-header-row $LOCAL >$t1` && t2=`mktemp` && `in2csv --no-header-row $REMOTE >$t2` && opendiff $t1 $t2 && rm -f $t1 $t2
+
+[difftool "intellij"]
+    cmd = open -nWa 'IntelliJ IDEA Ultimate.app' --args diff $LOCAL $REMOTE
+
+[difftool "intellij-csvkit"]
+    cmd = t1=`mktemp` && `in2csv --no-header-row $LOCAL >$t1` && t2=`mktemp` && `in2csv --no-header-row $REMOTE >$t2` && open -nWa 'IntelliJ IDEA Ultimate.app' --args diff $t1 $t2 && rm -f $t1 $t2
